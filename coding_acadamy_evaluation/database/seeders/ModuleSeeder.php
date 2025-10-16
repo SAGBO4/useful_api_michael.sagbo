@@ -23,6 +23,7 @@ class ModuleSeeder extends Seeder
 
    
     DB::table('modules')->insert(['name' => 'url_shortener']);
+    DB::table('modules')->insert(['name' => 'wallet']);
     DB::table('user_modules')->insert(['user_id' => 1, 'module_id' => 1, 'is_active' => true]);
 }
 

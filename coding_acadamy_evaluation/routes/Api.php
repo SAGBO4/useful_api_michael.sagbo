@@ -22,3 +22,12 @@ Route::middleware(['auth:sanctum', 'checkModule:url_shortener'])->group(function
     Route::post('/short-url', [ShortUrlController::class, 'create']);
     Route::get('/short-url/{shortCode}/stats', [ShortUrlController::class, 'stats']);
 });
+
+use App\Http\Controllers\WalletController;
+
+Route::middleware(['auth:sanctum', 'checkModule:wallet'])->group(function () {
+    Route::get('/wallet/balance', [WalletController::class, 'balance']);
+    Route::post('/wallet/deposit', [WalletController::class, 'deposit']);
+    Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
+    Route::get('/wallet/history', [WalletController::class, 'history']);
+});
