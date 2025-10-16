@@ -15,3 +15,10 @@ Route::post('/user/{user}/module/{module}', [ModuleController::class, 'toggleMod
 Route::get('/protected-route', function () {
     return response()->json(['message' => 'Accès autorisé']);
 })->middleware(['auth:sanctum', 'checkModule:URL_Shortener']);
+
+use App\Http\Controllers\ShortUrlController;
+
+Route::middleware(['auth:sanctum', 'checkModule:url_shortener'])->group(function () {
+    Route::post('/short-url', [ShortUrlController::class, 'create']);
+    Route::get('/short-url/{shortCode}/stats', [ShortUrlController::class, 'stats']);
+});

@@ -20,6 +20,10 @@ class ModuleSeeder extends Seeder
         ['name' => 'Time Tracker', 'description' => 'Suivi du temps et sessions'],
         ['name' => 'Investment Tracker', 'description' => 'Suivi du portefeuille d’investissement'],
     ]);
+
+   
+    DB::table('modules')->insert(['name' => 'url_shortener']);
+    DB::table('user_modules')->insert(['user_id' => 1, 'module_id' => 1, 'is_active' => true]);
 }
 
 }
