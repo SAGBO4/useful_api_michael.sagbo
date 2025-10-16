@@ -1,0 +1,24 @@
+<?php
+
+// database/migrations/xxxx_create_wallets_table.php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateWalletsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('wallets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->decimal('balance', 15, 2)->default(0.00); // Solde en devise
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('wallets');
+    }
+}
