@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref('');
   const message = ref('');
 
-  // Charger l'utilisateur depuis chrome.storage.local au démarrage
+  // Chargeement de  l'utilisateur depuis chrome.storage.local au démarrage
   const loadUser = () => {
     return new Promise((resolve) => {
       chrome.storage.local.get(['user'], (result) => {
@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
     });
   };
 
-  // Sauvegarder l'utilisateur dans chrome.storage.local
+  // ici je sauvegarder l'utilisateur dans chrome.storage.local
   const saveUser = (userData) => {
     user.value = userData;
     chrome.storage.local.set({ user: userData });
@@ -25,9 +25,9 @@ export const useAuthStore = defineStore('auth', () => {
   // Inscription
   const register = async (email, password) => {
     try {
-      // Simuler une requête API
+      
       console.log('Inscription:', { email, password });
-      const userData = { email, id: Date.now() }; // Simuler un utilisateur
+      const userData = { email, id: Date.now() }; 
       saveUser(userData);
       error.value = '';
       message.value = 'Inscription réussie !';
@@ -40,9 +40,9 @@ export const useAuthStore = defineStore('auth', () => {
   // Connexion
   const login = async (email, password) => {
     try {
-      // Simuler une requête API
+     
       console.log('Connexion:', { email, password });
-      const userData = { email, id: Date.now() }; // Simuler un utilisateur
+      const userData = { email, id: Date.now() }; // Simulation
       saveUser(userData);
       error.value = '';
       message.value = 'Connexion réussie !';
@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
   // Réinitialisation du mot de passe
   const forgotPassword = async (email) => {
     try {
-      // Simuler une requête API
+      // Simulation d'une requête API vu que mon api ne marche pas
       console.log('Demande de réinitialisation pour:', email);
       error.value = '';
       message.value = 'Lien de réinitialisation envoyé à ' + email;
