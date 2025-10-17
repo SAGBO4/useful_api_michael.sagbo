@@ -9,18 +9,19 @@ const email = ref('');
 const password = ref('');
 
 onMounted(async () => {
-  await authStore.loadUser();
+  await authStore.loadData(); // Changé de loadUser à loadData
   if (authStore.user) {
-    router.push('/'); // Rediriger si déjà connecté
+    router.push('/dashboard');
   }
 });
 
 const handleLogin = async () => {
   await authStore.login(email.value, password.value);
   if (!authStore.error) {
-    router.push('/');
+    router.push('/dashboard');
   }
 };
+
 </script>
 
 <template>
@@ -49,33 +50,40 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
+/* Styles responsifs inchangés */
 .login {
-  padding: 20px;
-  max-width: 300px;
+  padding: 1.5rem;
+  max-width: min(90vw, 400px);
+  margin: 0 auto;
   font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 input {
   width: 100%;
-  padding: 8px;
+  padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  box-sizing: border-box;
 }
 button {
   width: 100%;
-  padding: 10px;
+  padding: 0.75rem;
   background-color: #28a745;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 10px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  margin-top: 0.5rem;
 }
 button:hover {
   background-color: #218838;
@@ -84,7 +92,7 @@ button:hover {
   background: none;
   color: #007bff;
   border: none;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   text-align: left;
 }
 .forgot-password-button:hover, .register-button:hover {
@@ -92,88 +100,31 @@ button:hover {
 }
 .error {
   color: red;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  margin: 0.5rem 0;
 }
 .success {
   color: green;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  margin: 0.5rem 0;
 }
-
-
-/* Styles généraux et variables */
-:root {
-    --couleur-primaire: #007bff;
-    --couleur-secondaire: #f8f9fa;
-    --couleur-texte: #333;
-    --couleur-fond: #fff;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    line-height: 1.6;
-    background-color: var(--couleur-secondaire);
-    color: var(--couleur-texte);
-}
-
-/* En-tête */
-header {
-    background-color: var(--couleur-primaire);
-    color: var(--couleur-fond);
-    padding: 1rem 2rem;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-}
-
-nav a {
-    color: var(--couleur-fond);
-    text-decoration: none;
-    margin: 0 1rem;
-    font-weight: bold;
-}
-
-/* Conteneur principal et cartes */
-.container {
+@media (min-width: 600px) {
+  .login {
     padding: 2rem;
-    display: flex; /* Utilise Flexbox pour un affichage flexible */
-    flex-wrap: wrap; /* Permet aux cartes de passer à la ligne */
-    gap: 2rem; /* Espacement entre les cartes */
-    justify-content: center;
-}
-
-.card {
-    background-color: var(--couleur-fond);
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    flex: 1 1 300px; /* Les cartes peuvent grandir ou rétrécir avec une taille de base de 300px*/
-}
-
-/* Pied de page */
-footer {
-    background-color: var(--couleur-texte);
-    color: var(--couleur-fond);
-    text-align: center;
+  }
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  button {
     padding: 1rem;
+  }
 }
-
-/* Media query pour les petits écrans (smartphones) */
-@media (max-width: 600px) {
-    header {
-        padding: 1rem;
-    }
-
-    nav a {
-        display: block; /* Les liens s'affichent un par un */
-        margin: 0.5rem 0;
-    }
-
-    .container {
-        padding: 1rem;
-    }
+@media (max-width: 300px) {
+  .login {
+    padding: 1rem;
+  }
+  input, button {
+    font-size: 0.8rem;
+  }
 }
-
 </style>

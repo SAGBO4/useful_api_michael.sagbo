@@ -10,19 +10,15 @@ export const useModulesStore = defineStore('modules', () => {
   const error = ref('');
   const message = ref('');
 
-  // ici on changes les modules depuis chrome.storage.local
+  // Charge les modules
   const loadModules = () => {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['modules'], (result) => {
-        modules.value = result.modules || { wallet: true, urlShortener: true, timeTracker: true };
-        resolve();
-      });
-    });
+    const storedModules = localStorage.getItem('modules');
+    modules.value = storedModules ? JSON.parse(storedModules) : { wallet: true, urlShortener: true, timeTracker: true };
   };
 
-  // Sauvegarde des modules
+  // Sauvegarde les modules
   const saveModules = () => {
-    chrome.storage.local.set({ modules: modules.value });
+    localStorage.setItem('modules', JSON.stringify(modules.value));
   };
 
   // Activer/désactiver un module

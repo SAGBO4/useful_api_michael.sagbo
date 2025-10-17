@@ -14,12 +14,13 @@ const timeTrackerStore = useTimeTrackerStore();
 const modulesStore = useModulesStore();
 const router = useRouter();
 
-const newUrl = ref('');
 const transactionAmount = ref(0);
 const transactionDescription = ref('');
+const transactionType = ref('credit');
+const newUrl = ref('');
 
 onMounted(async () => {
-  await authStore.loadUser();
+  await authStore.loadData();
   await walletStore.loadWallet();
   await urlShortenerStore.loadUrls();
   await timeTrackerStore.loadSessions();
@@ -29,13 +30,26 @@ onMounted(async () => {
   }
 });
 
-const addTransaction = () => {
-  walletStore.addTransaction(transactionAmount.value, 'credit', transactionDescription.value);
+
+const addTransaction = async () => {
+  if (transactionAmount.value <= 0) {
+    walletStore.error = 'Le montant doit être positif';
+    return;
+  }
+  await walletStore.addTransaction(
+    transactionAmount.value,
+    transactionType.value,
+    transactionDescription.value
+  );
   transactionAmount.value = 0;
   transactionDescription.value = '';
 };
 
 const shortenUrl = async () => {
+  if (!newUrl.value.startsWith('http')) {
+    urlShortenerStore.error = 'L\'URL doit commencer par http:// ou https://';
+    return;
+  }
   await urlShortenerStore.shortenUrl(newUrl.value);
   newUrl.value = '';
 };

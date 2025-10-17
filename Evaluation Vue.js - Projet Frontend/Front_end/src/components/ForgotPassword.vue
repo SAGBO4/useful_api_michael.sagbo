@@ -8,17 +8,13 @@ const router = useRouter();
 const email = ref('');
 
 const handleResetPassword = async () => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email.value)) {
-    authStore.error = 'Veuillez entrer un email valide';
-    return;
-  }
   await authStore.forgotPassword(email.value);
   if (!authStore.error) {
     email.value = '';
   }
 };
 </script>
+<!-- Template et styles inchangés -->
 
 <template>
   <div class="forgot-password">
@@ -40,33 +36,40 @@ const handleResetPassword = async () => {
 </template>
 
 <style scoped>
+/* Styles responsifs inchangés */
 .forgot-password {
-  padding: 20px;
-  max-width: 300px;
+  padding: 1.5rem;
+  max-width: min(90vw, 400px);
+  margin: 0 auto;
   font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 input {
   width: 100%;
-  padding: 8px;
+  padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  box-sizing: border-box;
 }
 button {
   width: 100%;
-  padding: 10px;
+  padding: 0.75rem;
   background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 10px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  margin-top: 0.5rem;
 }
 button:hover {
   background-color: #c82333;
@@ -79,10 +82,31 @@ button:hover {
 }
 .error {
   color: red;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  margin: 0.5rem 0;
 }
 .success {
   color: green;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  margin: 0.5rem 0;
+}
+@media (min-width: 600px) {
+  .forgot-password {
+    padding: 2rem;
+  }
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  button {
+    padding: 1rem;
+  }
+}
+@media (max-width: 300px) {
+  .forgot-password {
+    padding: 1rem;
+  }
+  input, button {
+    font-size: 0.8rem;
+  }
 }
 </style>

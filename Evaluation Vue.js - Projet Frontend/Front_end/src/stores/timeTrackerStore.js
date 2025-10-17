@@ -6,28 +6,24 @@ export const useTimeTrackerStore = defineStore('timeTracker', () => {
   const error = ref('');
   const message = ref('');
 
-  // Chargement  des sessions depuis chrome.storage.local
+  // Charge les sessions
   const loadSessions = () => {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['sessions'], (result) => {
-        sessions.value = result.sessions || [];
-        resolve();
-      });
-    });
+    const storedSessions = localStorage.getItem('sessions');
+    sessions.value = storedSessions ? JSON.parse(storedSessions) : [];
   };
 
-  // Sauvegarde des sessions
+  // Sauvegarde les sessions
   const saveSessions = () => {
-    chrome.storage.local.set({ sessions: sessions.value });
+    localStorage.setItem('sessions', JSON.stringify(sessions.value));
   };
 
-  // Démarage d'une session
+  // Démarre la session
   const startSession = (url) => {
     const session = {
       id: Date.now(),
       url,
       startTime: Date.now(),
-      duration: 0 // En secondes
+      duration: 0
     };
     sessions.value.push(session);
     saveSessions();
@@ -35,7 +31,7 @@ export const useTimeTrackerStore = defineStore('timeTracker', () => {
     error.value = '';
   };
 
-  // Mis à jour la durée d'une session
+  // Mettre à jour la durée d'une session
   const updateSession = (sessionId, duration) => {
     const session = sessions.value.find(s => s.id === sessionId);
     if (session) {
@@ -49,7 +45,7 @@ export const useTimeTrackerStore = defineStore('timeTracker', () => {
     }
   };
 
-  // Arrêt d'une session
+  // Arrêter une session
   const stopSession = (sessionId) => {
     const session = sessions.value.find(s => s.id === sessionId);
     if (session) {

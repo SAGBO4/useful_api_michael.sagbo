@@ -7,35 +7,30 @@ export const useWalletStore = defineStore('wallet', () => {
   const error = ref('');
   const message = ref('');
 
-  // Charger les données du portefeuille
+  // Charge les données
   const loadWallet = () => {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['wallet'], (result) => {
-        if (result.wallet) {
-          balance.value = result.wallet.balance || 0;
-          transactions.value = result.wallet.transactions || [];
-        }
-        resolve();
-      });
-    });
+    const storedWallet = localStorage.getItem('wallet');
+    if (storedWallet) {
+      const wallet = JSON.parse(storedWallet);
+      balance.value = wallet.balance || 0;
+      transactions.value = wallet.transactions || [];
+    }
   };
 
-  // Sauvegarder le portefeuille
+  // Sauvegarde le portefeuille
   const saveWallet = () => {
-    chrome.storage.local.set({
-      wallet: { balance: balance.value, transactions: transactions.value }
-    });
+    localStorage.setItem('wallet', JSON.stringify({ balance: balance.value, transactions: transactions.value }));
   };
 
-  // Ajouter une transaction
+  // Ajoute une transaction
   const addTransaction = async (amount, type, description) => {
     try {
-      // Simuler une requête API
+      if (amount <= 0) throw new Error('Le montant doit être positif');
       console.log('Transaction:', { amount, type, description });
       const transaction = {
         id: Date.now(),
         amount,
-        type, // 'credit' ou 'debit'
+        type,
         description,
         date: new Date().toISOString()
       };
@@ -49,7 +44,7 @@ export const useWalletStore = defineStore('wallet', () => {
       error.value = '';
       message.value = `Transaction ${type} ajoutée !`;
     } catch (err) {
-      error.value = 'Erreur lors de l\'ajout de la transaction';
+      error.value = err.message || 'Erreur lors de l\'ajout de la transaction';
       message.value = '';
     }
   };
@@ -64,8 +59,6 @@ export const useWalletStore = defineStore('wallet', () => {
       } else if (transaction.type === 'debit') {
         balance.value += transaction.amount;
       }
-
-      
       saveWallet();
       message.value = 'Transaction supprimée';
       error.value = '';

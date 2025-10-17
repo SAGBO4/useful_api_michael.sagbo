@@ -6,27 +6,23 @@ export const useUrlShortenerStore = defineStore('urlShortener', () => {
   const error = ref('');
   const message = ref('');
 
-  // Charger les URLs depuis chrome.storage.local
+  // Charge les URLs
   const loadUrls = () => {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['urls'], (result) => {
-        urls.value = result.urls || [];
-        resolve();
-      });
-    });
+    const storedUrls = localStorage.getItem('urls');
+    urls.value = storedUrls ? JSON.parse(storedUrls) : [];
   };
 
-  // Sauvegarder les URLs
+  // Sauvegarde les URLs
   const saveUrls = () => {
-    chrome.storage.local.set({ urls: urls.value });
+    localStorage.setItem('urls', JSON.stringify(urls.value));
   };
 
   // Raccourcir une URL
   const shortenUrl = async (originalUrl) => {
     try {
-      // Simulation d'une requête API (ex. : Bitly, TinyURL,kloome)
+      if (!originalUrl.startsWith('http')) throw new Error('L\'URL doit commencer par http:// ou https://');
       console.log('Raccourcissement de:', originalUrl);
-      const shortUrl = `short-${Date.now()}`; // Simulation d'un lien court
+      const shortUrl = `short-${Date.now()}`;
       const urlData = {
         id: Date.now(),
         original: originalUrl,
@@ -39,7 +35,7 @@ export const useUrlShortenerStore = defineStore('urlShortener', () => {
       message.value = 'URL raccourcie avec succès !';
       return shortUrl;
     } catch (err) {
-      error.value = 'Erreur lors du raccourcissement de l\'URL';
+      error.value = err.message || 'Erreur lors du raccourcissement de l\'URL';
       message.value = '';
     }
   };
